@@ -42,10 +42,7 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        body { 
-            background-color: var(--bg-body); color: var(--text-main); display: flex; 
-            height: 100vh; height: -webkit-fill-available; overflow-x: hidden; font-size: 15px; width: 100vw;
-        }
+        body { background-color: var(--bg-body); color: var(--text-main); display: flex; height: 100vh; height: -webkit-fill-available; overflow: hidden; font-size: 15px; }
 
         /* --- CUSTOM SCROLLBAR FOR PC/LAPTOP --- */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -53,6 +50,7 @@
         ::-webkit-scrollbar-thumb { background: #dcdde1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #b2bec3; }
         .sidebar-scroll::-webkit-scrollbar { display: none; }
+        .log-modal::-webkit-scrollbar { display: none; } /* Hide modal scrollbar cleanly */
 
         /* --- LAYOUT --- */
         #sidebar { width: 280px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 24px 0; z-index: 100; transition: transform 0.3s ease; flex-shrink: 0; }
@@ -82,7 +80,7 @@
         .avatar:hover { transform: scale(1.05); box-shadow: var(--shadow-md); }
 
         /* Dropdowns */
-        .notif-dropdown { position: absolute; top: 60px; right: 60px; width: 340px; background: var(--bg-card); border-radius: var(--radius-md); box-shadow: 0 15px 40px rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 16px 0; opacity: 0; pointer-events: none; transition: var(--transition); transform: translateY(10px); z-index: 200; }
+        .notif-dropdown { position: absolute; top: 60px; right: 60px; width: 340px; background: var(--bg-card); border-radius: var(--radius-md); box-shadow: 0 15px 40px rgba(0,0,0,0.1); border: 1px solid var(--border-color); padding: 16px 0; opacity: 0; pointer-events: none; transition: var(--transition); transform: translateY(10px); z-index: 200; max-height: 400px; overflow-y: auto;}
         .notif-dropdown.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
         .notif-header { padding: 0 24px 12px; border-bottom: 1px solid var(--border-color); font-weight: 700; font-size: 16px; display: flex; justify-content: space-between; align-items: center; }
         .notif-item { padding: 16px 24px; border-bottom: 1px solid var(--border-color); display: flex; gap: 16px; align-items: flex-start; transition: var(--transition); cursor: pointer; }
@@ -188,20 +186,20 @@
         .phase-detail-box p { font-size: 14px; color: var(--text-muted); line-height: 1.6; font-weight: 500; }
 
         /* --- CALENDAR --- */
-        .cal-header-row { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin-bottom: 12px; }
-        .cal-header-row div { font-weight: 700; color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
-        .cal-day { aspect-ratio: 1; width: 100%; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; font-size: 14px; font-weight: 700; transition: var(--transition); border: 2px solid transparent; background: var(--input-bg); color: var(--text-main); position: relative; }
+        .cal-header-row { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin-bottom: 16px; }
+        .cal-header-row div { font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; text-align: center; }
+        .cal-day { aspect-ratio: 1; width: 100%; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; font-size: 16px; font-weight: 700; transition: var(--transition); border: 2px solid transparent; background: var(--input-bg); color: var(--text-main); position: relative; }
         .cal-day:hover:not(.empty) { border-color: var(--brand-primary); background: var(--bg-card); transform: scale(1.1); z-index: 2; box-shadow: var(--shadow-sm); }
         .cal-day.empty { background: transparent; cursor: default; }
         .cal-day.period { background: var(--gradient-period); color: white; border: none; box-shadow: 0 4px 10px rgba(255,107,129,0.3); }
         .cal-day.fertile { background: rgba(162, 155, 254, 0.15); color: #8e83fc; border-color: transparent; }
         .cal-day.ovulation { background: var(--gradient-fertility); color: white; border: none; box-shadow: 0 4px 10px rgba(162,155,254,0.3); }
         .cal-day.selected { border: 3px solid var(--text-main) !important; font-weight: 800; transform: scale(1.15); z-index: 3; box-shadow: var(--shadow-md); }
-        .cal-day.has-log::after { content: ''; position: absolute; bottom: 4px; width: 6px; height: 6px; background: var(--text-main); border-radius: 50%; }
+        .cal-day.has-log::after { content: ''; position: absolute; bottom: 6px; width: 6px; height: 6px; background: var(--text-main); border-radius: 50%; }
         .cal-day.period.has-log::after, .cal-day.ovulation.has-log::after { background: white; }
         
-        .day-summary-panel { margin-top: 24px; padding: 24px; border-radius: var(--radius-md); background: var(--input-bg); display: none; border: 1px solid var(--border-color); }
+        .day-summary-panel { padding: 24px; border-radius: var(--radius-md); background: var(--input-bg); display: none; border: 1px solid var(--border-color); }
         .day-summary-panel.active { display: block; animation: fadeIn 0.3s; }
         .ds-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px; margin-top: 16px; }
         .ds-item { background: var(--bg-card); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
@@ -209,7 +207,7 @@
         .ds-item p { font-size: 15px; font-weight: 800; color: var(--text-main); text-transform: capitalize; }
 
         /* --- OVERLAYS & MODALS --- */
-        .fab { position: fixed; bottom: 40px; right: 40px; width: 64px; height: 64px; border-radius: 50%; background: var(--brand-primary); color: white; font-size: 30px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(255, 107, 129, 0.4); cursor: pointer; transition: var(--transition); border: none; z-index: 1000; }
+        .fab { position: fixed; bottom: 40px; right: 40px; width: 68px; height: 68px; border-radius: 50%; background: var(--brand-primary); color: white; font-size: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(255, 107, 129, 0.4); cursor: pointer; transition: var(--transition); border: none; z-index: 1000; }
         .fab:hover { transform: scale(1.05) rotate(90deg); box-shadow: 0 15px 40px rgba(255, 107, 129, 0.5); }
         
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(45, 52, 54, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 3000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: var(--transition); padding: 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
@@ -221,7 +219,7 @@
         
         .log-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
         .log-option { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px 12px; border-radius: var(--radius-md); background: var(--input-bg); border: 2px solid transparent; cursor: pointer; transition: var(--transition); }
-        .log-option i { font-size: 36px; }
+        .log-option i { font-size: 40px; }
         .log-option span { font-size: 14px; font-weight: 700; text-align: center; color: var(--text-main); }
         .log-option:hover { border-color: var(--brand-primary); background: var(--bg-card); transform: translateY(-4px); box-shadow: var(--shadow-sm); }
 
@@ -229,7 +227,7 @@
         #toast i { color: #00b894; font-size: 24px; flex-shrink: 0;}
         #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        #onboarding-overlay .log-modal { max-width: 600px; padding: 40px; max-height: 90vh; overflow-y: auto; }
+        #onboarding-overlay .log-modal { max-width: 650px; padding: 40px; max-height: 90vh; overflow-y: auto; }
         .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
         /* --- EXTREME MOBILE RESPONSIVENESS (PHONES) --- */
@@ -239,6 +237,10 @@
         @media (max-width: 1100px) {
             .dashboard-grid { grid-template-columns: 1fr; }
             .hero-info h2 { font-size: 48px; }
+            
+            /* On tablet/smaller desktop, adjust calendar view so summary is below */
+            #view-calendar .dashboard-grid { display: flex; flex-direction: column; gap: 24px;}
+            #cal-day-summary { margin-top: 0; }
         }
         
         @media (max-width: 768px) {
@@ -267,6 +269,13 @@
             .hero-progress-container { margin: 24px auto 0; }
             .hero-graphic { width: 100px; height: 100px; font-size: 48px; border-width: 6px; }
             
+            /* Big mobile calendar specific styling */
+            #view-calendar .card { padding: 24px 12px; }
+            .cal-header-row div { font-size: 12px; margin-bottom: 8px;}
+            .cal-grid { gap: 6px; }
+            .cal-day { font-size: 16px; font-weight: 800; border-width: 2px; }
+            .day-summary-panel { padding: 20px 16px; border-radius: 16px; }
+
             /* Bottom Nav */
             #bottom-nav { display: flex; justify-content: space-around; align-items: center; position: fixed; bottom: 0; left: 0; right: 0; height: calc(65px + env(safe-area-inset-bottom)); background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-top: 1px solid var(--border-color); z-index: 500; padding-bottom: env(safe-area-inset-bottom); }
             .b-nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); text-decoration: none; font-size: 10px; font-weight: 700; flex: 1; padding: 10px 0; border-top: 3px solid transparent; margin-top: -1px;}
@@ -303,8 +312,8 @@
         @media (max-width: 360px) {
             .hero-info h2 { font-size: 36px; }
             .stats-grid { grid-template-columns: 1fr; }
-            .cal-day { font-size: 13px; }
-            .cal-header-row div { font-size: 10px; }
+            .cal-day { font-size: 14px; }
+            .cal-header-row div { font-size: 11px; }
             .emoji-btn { font-size: 28px; }
             .emoji-btn span { display: none; } /* Hide text on very small screens to fit emojis */
         }
@@ -437,11 +446,11 @@
             <!-- 2. CALENDAR -->
             <div id="view-calendar" class="view">
                 <div class="page-header"><button class="back-btn" onclick="navigate('view-overview')"><i class='bx bx-arrow-back'></i></button><h2>Calendar</h2></div>
-                <div class="dashboard-grid" style="grid-template-columns: 1fr 380px;">
+                <div class="dashboard-grid">
                     <div class="card">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                             <button class="icon-btn" onclick="changeMonth(-1)"><i class='bx bx-chevron-left'></i></button>
-                            <h3 style="font-size: 20px; font-weight: 800;" id="cal-month-title">Month Year</h3>
+                            <h3 style="font-size: 22px; font-weight: 800;" id="cal-month-title">Month Year</h3>
                             <button class="icon-btn" onclick="changeMonth(1)"><i class='bx bx-chevron-right'></i></button>
                         </div>
                         
@@ -656,8 +665,14 @@
                                     <div class="chip" onclick="toggleMultiChip(this)">Anemia</div>
                                     <div class="chip" onclick="toggleMultiChip(this)">PCOS</div>
                                     <div class="chip" onclick="toggleMultiChip(this)">Endometriosis</div>
+                                    <div class="chip" onclick="toggleMultiChip(this)">PMDD</div>
+                                    <div class="chip" onclick="toggleMultiChip(this)">Fibroids</div>
+                                    <div class="chip" onclick="toggleMultiChip(this)">Thyroid Issues</div>
+                                    <div class="chip" onclick="toggleMultiChip(this)">Migraines</div>
+                                    <div class="chip" onclick="toggleMultiChip(this)">IBS</div>
+                                    <div class="chip" onclick="toggleMultiChip(this)">UTI Prone</div>
                                     <div class="chip" onclick="toggleMultiChip(this)">Lupus</div>
-                                    <div class="chip" onclick="toggleMultiChip(this)">STD/STI</div>
+                                    <div class="chip" onclick="toggleMultiChip(this)">Fibromyalgia</div>
                                 </div>
                             </div>
 
@@ -667,6 +682,11 @@
                                     <div class="chip" onclick="toggleMultiChip(this)">Dairy Free</div>
                                     <div class="chip" onclick="toggleMultiChip(this)">Gluten Free</div>
                                     <div class="chip" onclick="toggleMultiChip(this)">Nut Allergy</div>
+                                    <div class="chip" onclick="toggleMultiChip(this)">Soy Allergy</div>
+                                    <div class="chip" onclick="toggleMultiChip(this)">Shellfish Allergy</div>
+                                    <div class="chip" onclick="toggleMultiChip(this)">Latex Allergy</div>
+                                    <div class="chip" onclick="toggleMultiChip(this)">Penicillin Allergy</div>
+                                    <div class="chip" onclick="toggleMultiChip(this)">Pollen/Hay Fever</div>
                                 </div>
                             </div>
 
@@ -765,7 +785,12 @@
                     <div class="chip" onclick="toggleMultiChip(this)">Anemia</div>
                     <div class="chip" onclick="toggleMultiChip(this)">PCOS</div>
                     <div class="chip" onclick="toggleMultiChip(this)">Endometriosis</div>
-                    <div class="chip" onclick="toggleMultiChip(this)">Anxiety</div>
+                    <div class="chip" onclick="toggleMultiChip(this)">PMDD</div>
+                    <div class="chip" onclick="toggleMultiChip(this)">Fibroids</div>
+                    <div class="chip" onclick="toggleMultiChip(this)">Thyroid Issues</div>
+                    <div class="chip" onclick="toggleMultiChip(this)">Migraines</div>
+                    <div class="chip" onclick="toggleMultiChip(this)">IBS</div>
+                    <div class="chip" onclick="toggleMultiChip(this)">UTI Prone</div>
                 </div>
             </div>
 
@@ -798,7 +823,7 @@
             logs: {} 
         };
 
-        let appState = JSON.parse(localStorage.getItem('auraAppFinalMobile')) || JSON.parse(JSON.stringify(blankState));
+        let appState = JSON.parse(localStorage.getItem('auraAppFinalMobile3')) || JSON.parse(JSON.stringify(blankState));
         let currentPredictions = {};
         let generatedNotifications = [];
 
@@ -825,7 +850,7 @@
         }, 1000 * 60 * 60);
 
         function saveState() {
-            localStorage.setItem('auraAppFinalMobile', JSON.stringify(appState));
+            localStorage.setItem('auraAppFinalMobile3', JSON.stringify(appState));
             calculateEngine(); 
         }
 
@@ -845,8 +870,7 @@
             // Capture optional conditions
             const conds = [];
             document.getElementById('ob-conditions').querySelectorAll('.chip.active').forEach(c => {
-                if(c.textContent === 'Anxiety') appState.health.mental.push('Anxiety');
-                else conds.push(c.textContent);
+                conds.push(c.textContent);
             });
             appState.health.conditions = conds;
             appState.user.isConfigured = true;
@@ -858,7 +882,7 @@
 
         function clearAllData() {
             if(confirm("Are you sure you want to delete all personal cycle data? This cannot be undone.")) {
-                localStorage.removeItem('auraAppFinalMobile');
+                localStorage.removeItem('auraAppFinalMobile3');
                 appState = JSON.parse(JSON.stringify(blankState));
                 document.getElementById('onboarding-overlay').classList.add('active');
                 document.getElementById('ob-name').value = "";
@@ -908,14 +932,17 @@
                     ? "Because you have anemia, it is critical to focus on iron right now. Eat spinach, red meat, or lentils, paired with Vitamin C (like citrus) for absorption."
                     : "Focus on iron-rich foods to replenish blood loss. Magnesium can help with cramps. Drink warm herbal teas.";
                 if (h.allergies.includes('Dairy Free')) nutritionTxt += " Use fortified plant milks for extra calcium without the dairy.";
+                if (h.conditions.includes('IBS')) nutritionTxt += " IBS flare-ups are common now; stick to low-FODMAP, easily digestible foods.";
                 
-                moveTxt = h.conditions.includes('Endometriosis')
-                    ? "Endometriosis flares can be tough right now. Stick to very gentle pelvic stretches or total rest. Heat therapy is your friend."
+                moveTxt = h.conditions.includes('Endometriosis') || h.conditions.includes('Fibroids')
+                    ? "Flares can be tough right now. Stick to very gentle pelvic stretches or total rest. Heat therapy is your friend."
                     : "Keep it gentle. Light walking, restorative yoga, or stretching is best.";
 
                 insight = (todayLog && todayLog.symptoms && todayLog.symptoms.includes("Cramps"))
                     ? "Cramps logged today: Apply heat to your lower abdomen and try raspberry leaf tea to relax the uterine muscles."
                     : "Your body is working hard. Prioritize rest and hydration today.";
+                
+                if(h.conditions.includes('Migraines')) insight = "Hormone drops can trigger menstrual migraines today. Keep hydrated and monitor triggers.";
 
             } else if (currentDate < fertileStart) {
                 // FOLLICULAR
@@ -937,7 +964,7 @@
                 expectTxt = "You are at peak fertility. Estrogen and testosterone peak, leading to high energy, heightened senses, and increased libido.";
                 
                 nutritionTxt = "Cruciferous vegetables (broccoli, kale) help flush excess estrogen. Focus on vibrant meals.";
-                if (h.conditions.includes('Lupus')) moveTxt = "Energy is higher, but protect your joints. Opt for moderate swimming or pilates instead of heavy impact.";
+                if (h.conditions.includes('Lupus') || h.conditions.includes('Fibromyalgia')) moveTxt = "Energy is higher, but protect your joints. Opt for moderate swimming or pilates instead of heavy impact.";
                 else moveTxt = "You likely have maximum energy and stamina. Go for high-intensity interval training (HIIT) or heavy lifting.";
                 
                 insight = appState.user.goal === 'conceive' 
@@ -948,6 +975,7 @@
                 // LUTEAL
                 phase = "Luteal Phase"; emoji = "🍂"; pColor = "#00cec9";
                 expectTxt = "Progesterone rises, bringing a calming effect initially, but as hormones drop, PMS symptoms (bloating, mood swings) may appear.";
+                if(h.conditions.includes('PMDD')) expectTxt = "With PMDD, the luteal drop in hormones can cause severe mood shifts. Prioritize extreme self-care, therapy tools, and notify your support system.";
                 
                 nutritionTxt = h.allergies.includes('Gluten Free')
                     ? "Complex gluten-free carbs (sweet potatoes, quinoa) help stabilize blood sugar and mood. Limit salty foods to reduce bloating."
@@ -991,6 +1019,9 @@
             }
             if (appState.health.conditions.includes('STD/STI')) {
                 generatedNotifications.push({ title: "Health Reminder", text: `Remember to schedule your regular wellness and screening appointments.`, icon: "bx-plus-medical", color: "var(--text-muted)" });
+            }
+            if (appState.health.conditions.includes('Thyroid Issues')) {
+                generatedNotifications.push({ title: "Medication Reminder", text: `Take your thyroid medication consistently at the same time each day.`, icon: "bx-capsule", color: "var(--brand-tertiary)" });
             }
             
             const todayStr = formatYMD(currentDate);
